@@ -21,13 +21,13 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text("iOS 26.0 - Latest (arm64e)")
                         .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     #if targetEnvironment(simulator)
                     Label("Simulator only · signing unavailable", systemImage: "info.circle")
                         .font(.caption)
                         .foregroundStyle(.orange)
                         .accessibilityIdentifier("lycorine.simulator.warning")
                     #endif
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 15)
