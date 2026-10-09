@@ -92,14 +92,7 @@ final class cryptex_service {
         if let tunnelError {
             let message = tunnelError.pointee.message.map { String(cString: $0) } ?? "unknown connection error"
             idevice_error_free(tunnelError)
-            let tcpEvidence = LycorineTCPProbe.check(host: tunnelHost, port: tunnelPort)
-            let advice: String
-            if message.localizedCaseInsensitiveContains("connectionreset")
-                || message.localizedCaseInsensitiveContains("connection reset") {
-                advice = "The peer reset the RemotePairing handshake. TCP evidence: \(tcpEvidence) The discovered Bonjour port is not proof that the VPN endpoint forwards that same service, and a parsed pairing record is not proof that the device accepted it."
-            } else {
-                advice = "TCP evidence: \(tcpEvidence) Check the selected Bonjour service, local VPN IP, and paired device identity independently."
-            }
+            let advice = "TCP reachability does not identify the RemotePairing stage. Run Settings > Test RemotePairing protocol (no credentials). A valid hello response would narrow this to pairing verification, setup or tunnel creation; a missing hello response suggests a service/protocol mismatch. This is not an Apple TSS response."
             throw cryptex_err(msg: "RemotePairing at \(tunnelHost):\(tunnelPort) failed: \(message). \(advice) Apple TSS was not contacted.")
         }
         guard let adapter, let handshake else {
