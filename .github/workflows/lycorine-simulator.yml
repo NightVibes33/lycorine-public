@@ -1,0 +1,114 @@
+name: Lycorine iPhone 16 simulator smoke test
+
+on:
+  push:
+    paths:
+      - 'Lycorine/**'
+      - 'Lycorine.xcodeproj/**'
+      - '.github/workflows/lycorine-simulator.yml'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  iphone16-simulator:
+    name: iPhone 16 iOS 27 Simulator UI test
+    runs-on: xcode-27
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect actual installed runtimes and device types
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p simulator-evidence
+          xcodebuild -version | tee simulator-evidence/xcode.txt
+          xcrun simctl list runtimes -j > simulator-evidence/runtimes.json
+          xcrun simctl list devicetypes -j > simulator-evidence/devicetypes.json
+          python3 - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path("simulator-evidence")
+          runtimes=json.loads((root/"runtimes.json").read_text())["runtimes"]
+          types=json.loads((root/"devicetypes.json").read_text())["devicetypes"]
+          phone=next((x for x in types if x.get("name")=="iPhone 16"),None)
+          if phone is None:
+              raise SystemExit("No iPhone 16 simulator device type is installed")
+          candidates=[r for r in runtimes if r.get("isAvailable",False) and
+               (r.get("version","").startswith("27.") or "iOS-27" in r.get("identifier",""))]
+          if not candidates:
+              raise SystemExit("No iOS 27 Simulator runtime available. Cannot claim beta 4 simulation.")
+          def build(r): return r.get("buildversion") or r.get("buildVersion") or "unknown"
+          exact=[r for r in candidates if build(r)=="24A5390f"]
+          selected=(exact or sorted(candidates,key=lambda r:r.get("version",""),reverse=True))[0]
+          info={
+             "requested_device":"iPhone 16",
+             "requested_runtime":"iOS 27.0 developer beta 4",
+             "requested_device_build":"24A5390f",
+             "actual_runtime":selected.get("name"),
+             "actual_version":selected.get("version"),
+             "actual_build":build(selected),
+             "actual_runtime_identifier":selected["identifier"],
+             "exact_beta4_runtime":bool(exact),
+             "limits":"UI only; no physical-device TSS/TXM/Cryptex/SEP signing"
+          }
+          (root/"runtime-evidence.json").write_text(json.dumps(info,indent=2)+"\n")
+          print(json.dumps(info,indent=2))
+          with open(os.environ["GITHUB_ENV"],"a") as f:
+             f.write("SIM_RUNTIME="+selected["identifier"]+"\n")
+             f.write("SIM_DEVICE_TYPE="+phone["identifier"]+"\n")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+             f.write("Requested: iPhone 16, iOS 27.0 beta 4 (24A5390f).\n\n")
+             f.write("Actual: "+str(selected.get("name"))+" ("+build(selected)+").\n\n")
+             f.write("Exact beta 4 runtime: "+str(bool(exact))+"\n\n")
+             f.write("Simulator is not evidence of hardware Cryptex/TSS bypass.\n")
+          PY
+      - name: Boot iPhone 16 simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          SIM_UDID="$(xcrun simctl create Lycorine-iPhone16-27 "$SIM_DEVICE_TYPE" "$SIM_RUNTIME")"
+          echo "SIM_UDID=$SIM_UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$SIM_UDID"
+          xcrun simctl bootstatus "$SIM_UDID" -b
+      - name: Build actual app for iOS Simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild build -project Lycorine.xcodeproj -scheme Lycorine \
+            -configuration Debug -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,id=$SIM_UDID" \
+            -derivedDataPath "$RUNNER_TEMP/lycorine-sim-derived" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            2>&1 | tee simulator-evidence/xcodebuild.log
+      - name: Install and launch Lycorine
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/lycorine-sim-derived/Build/Products/Debug-iphonesimulator/Lycorine.app"
+          test -f "$APP/Lycorine"
+          BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist")"
+          xcrun simctl install "$SIM_UDID" "$APP"
+          xcrun simctl launch "$SIM_UDID" "$BUNDLE_ID" | tee simulator-evidence/launch.txt
+          sleep 6
+          xcrun simctl io "$SIM_UDID" screenshot simulator-evidence/iphone16-screen.png
+          test -s simulator-evidence/iphone16-screen.png
+          xcrun simctl spawn "$SIM_UDID" log show --last 3m --style compact \
+            --predicate 'process == "Lycorine"' \
+            > simulator-evidence/device-log.txt 2>&1 || true
+          echo "Simulator UI test done; no code-signing bypass tested."
+      - name: Upload simulator runtime, build log and screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lycorine-iPhone16-iOS27-simulator-evidence
+          path: simulator-evidence/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Shutdown
+        if: always()
+        run: |
+          if [ -n "${SIM_UDID:-}" ]; then
+            xcrun simctl shutdown "$SIM_UDID" || true
+          fi
