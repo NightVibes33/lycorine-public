@@ -62,8 +62,10 @@ final class cryptex_service {
         // The pairing file and reachable RSD endpoint are separate prerequisites.
         // A file existing on disk is NOT proof the device accepted its credentials.
 
+        print("(rsd) local pairing file found; parsing format")
         var pairing: OpaquePointer?
         try Self.check(rp_pairing_file_read(pairingPath, &pairing), "read RSD pairing")
+        print("(rsd) pairing record parsed; remote acceptance not established")
         guard let pairing else { throw cryptex_err(msg: "RSD pairing record is empty") }
         defer { rp_pairing_file_free(pairing) }
 
@@ -79,6 +81,7 @@ final class cryptex_service {
             throw cryptex_err(msg: "Invalid RSD IPv4 address in Settings (\(tunnelHost)).")
         }
 
+        print("(rsd) opening RemotePairing tunnel at \(tunnelHost):\(tunnelPort)")
         var adapter: OpaquePointer?
         var handshake: OpaquePointer?
         let tunnelError = withUnsafePointer(to: &address) {
@@ -96,8 +99,10 @@ final class cryptex_service {
             throw cryptex_err(msg: "RemotePairing at \(tunnelHost):\(tunnelPort) failed: \(message). \(advice) Apple TSS was not contacted.")
         }
         guard let adapter, let handshake else {
+            print("(rsd) tunnel request yielded no adapter/handshake")
             throw cryptex_err(msg: "RSD did not return an adapter and handshake")
         }
+        print("(rsd) tunnel connected; connecting to cryptexd")
         defer {
             rsd_handshake_free(handshake)
             adapter_free(adapter)
@@ -106,6 +111,7 @@ final class cryptex_service {
         var client: OpaquePointer?
         try Self.check(cryptexd_connect_rsd(adapter, handshake, &client), "connect cryptexd")
         guard let client else { throw cryptex_err(msg: "cryptexd connection missing") }
+        print("(rsd) cryptexd client connected")
         // cryptexd RPCs consume the handle, including on error.
         return try operation(client)
     }
