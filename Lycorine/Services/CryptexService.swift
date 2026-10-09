@@ -89,7 +89,14 @@ final class cryptex_service {
         if let tunnelError {
             let message = tunnelError.pointee.message.map { String(cString: $0) } ?? "unknown connection error"
             idevice_error_free(tunnelError)
-            throw cryptex_err(msg: "RSD handshake at \(tunnelHost):\(tunnelPort) failed: \(message). Check LocalDevVPN is active, confirm the host/port in Settings, and verify the RSD pairing record. A reset does not indicate a TSS rejection.")
+            let advice: String
+            if message.localizedCaseInsensitiveContains("connectionreset")
+                || message.localizedCaseInsensitiveContains("connection reset") {
+                advice = "The peer reset the RemotePairing handshake. This can happen WHILE LocalDevVPN is connected. Discover this iPhone's current RemotePairing port, then check whether the imported RSD record was paired on the same network path. A structurally valid file is not proof of pairing authorization."
+            } else {
+                advice = "Confirm the configured peer IP/port and the imported remote-pairing record. VPN connectivity and remote-pairing trust are separate checks."
+            }
+            throw cryptex_err(msg: "RemotePairing at \(tunnelHost):\(tunnelPort) failed: \(message). \(advice) Apple TSS was not contacted.")
         }
         guard let adapter, let handshake else {
             throw cryptex_err(msg: "RSD did not return an adapter and handshake")
