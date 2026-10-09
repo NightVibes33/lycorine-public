@@ -36,6 +36,9 @@ struct SettingsView: View {
     @State private var rsdStatus = "Not tested"
     @State private var testing = false
     @State private var checkingTCP = false
+    @State private var comparingEndpoints = false
+    @State private var endpointComparison = "Not compared"
+    @State private var verifiedPeerIP: String?
     @State private var tcpStatus = "Not tested"
     @State private var checkingProtocol = false
     @State private var protocolStatus = "Not tested"
@@ -51,12 +54,12 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("RSD / LocalDevVPN") {
-                    TextField("VPN tunnel IPv4", text: $rsdHost)
+                    TextField("LocalDevVPN Device IP / RemotePairing peer", text: $rsdHost)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                     TextField("RSD port", value: $rsdPort, format: .number)
                         .keyboardType(.numberPad)
-                    Text("With LocalDevVPN already active, keep its Device IP (usually 10.7.0.1). Use the current _remotepairing._tcp port discovered for this iPhone; it may change after reboot.")
+                    Text("Use LocalDevVPN’s Device IP / remote peer, not its Tunnel IP (local interface). On some iOS 27 configurations, 10.7.1.1 is the local tunnel and 10.7.0.1 is the device. Check your actual LocalDevVPN settings; the port may change after reboot.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Button("Discover current RemotePairing port") { discovery.start() }
@@ -82,6 +85,60 @@ struct SettingsView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
+                    Button(comparingEndpoints ? "Comparing VPN endpoints..." : "Compare VPN peer addresses (no credentials)") {
+                        let port = LycorineRSD.port
+                        comparingEndpoints = true
+                        verifiedPeerIP = nil
+                        endpointComparison = "Testing 10.7.0.1 and 10.7.1.1 at TCP \(port)..."
+                        print("(rsd.compare) begin port=\(port) candidate_peers=10.7.0.1,10.7.1.1")
+                        DispatchQueue.global(qos: .utility).async {
+                            var reports: [String] = []
+                            var verified: [String] = []
+                            for candidate in ["10.7.0.1", "10.7.1.1"] {
+                                let tcp = LycorineTCPProbe.check(host: candidate, port: port)
+                                let protocolResult: String
+                                if tcp.hasPrefix("TCP connected") {
+                                    protocolResult = LycorineRemotePairingProbe.test(host: candidate, port: port)
+                                    if protocolResult.hasPrefix("Stage 3: Valid RemotePairing hello response") {
+                                        verified.append(candidate)
+                                    }
+                                } else {
+                                    protocolResult = "Protocol hello skipped: TCP did not connect"
+                                }
+                                let report = "\(candidate): \(tcp) | \(protocolResult)"
+                                print("(rsd.compare) \(report)")
+                                reports.append(report)
+                            }
+                            let summary: String
+                            let recommendation: String?
+                            if verified.count == 1 {
+                                recommendation = verified[0]
+                                summary = "One endpoint returned a valid unauthenticated RemotePairing response. You can apply that Device IP below. Pairing authorization still needs testing."
+                            } else if verified.count > 1 {
+                                recommendation = nil
+                                summary = "Both endpoints replied to the initial RemotePairing hello. Confirm the actual Device IP from LocalDevVPN; no automatic selection."
+                            } else {
+                                recommendation = nil
+                                summary = "Neither endpoint returned a valid RemotePairing hello. TCP success alone is insufficient. Confirm LocalDevVPN Device IP, discovered port, and routing; do not replace pairing credentials yet."
+                            }
+                            DispatchQueue.main.async {
+                                endpointComparison = reports.joined(separator: "\n") + "\n" + summary
+                                verifiedPeerIP = recommendation
+                                comparingEndpoints = false
+                            }
+                        }
+                    }
+                    .disabled(comparingEndpoints || !(1...65535).contains(rsdPort))
+                    Text(endpointComparison)
+                        .font(.caption.monospaced())
+                        .textSelection(.enabled)
+                    if let verifiedPeerIP {
+                        Button("Use responding RemotePairing peer: \(verifiedPeerIP)") {
+                            rsdHost = verifiedPeerIP
+                            rsdStatus = "Selected \(verifiedPeerIP):\(rsdPort) after a valid RemotePairing hello. Now test authenticated RSD / Cryptexd."
+                            print("(rsd.compare) selected verified response peer \(verifiedPeerIP) port=\(rsdPort)")
+                        }
+                    }
                     Button(checkingTCP ? "Checking TCP..." : "Test TCP endpoint (no pairing)") {
                         let host = LycorineRSD.host
                         let port = LycorineRSD.port

@@ -51,3 +51,8 @@ LocalDevVPN can forward the **raw RemotePairing** service at a VPN Device IP suc
 ## Persistent logs and Files access
 
 Lycorine captures stdout/stderr at launch without requiring the Logs screen to be open. In iOS Files, navigate to On My iPhone > Lycorine > Lycorine-Logs > latest.log. Five previous logs are archived (5 MB each). The Logs context menu and Settings both provide a share option. This also exposes the app's full Documents folder, including pairingFile.plist. Treat pairing records as private credentials and inspect diagnostic output before sharing. Logging does not affect Apple TSS authorization.
+
+
+### Distinguish the LocalDevVPN interface IP from its RemotePairing Device IP
+
+On some iOS 27 LocalDevVPN configurations, `10.7.1.1` is the local tunnel interface and `10.7.0.1` is the remote pairing **Device IP**. A TCP connection to the local tunnel address is not proof that the RemotePairing responder is listening there. In Settings use **Compare VPN peer addresses (no credentials)** to test both endpoints with the currently discovered port and a single public `attemptPairVerify` greeting per reachable endpoint. The app only offers **Use responding RemotePairing peer** if exactly one endpoint returns a valid initial response. Neither this probe nor a positive response supplies TSS authorization or confirms the pairing record. Reference: [SideStore issue #1592](https://github.com/SideStore/SideStore/issues/1592).
