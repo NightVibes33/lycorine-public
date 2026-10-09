@@ -37,12 +37,16 @@ struct LycorineApp: App {
         setvbuf(stdout, nil, _IONBF, 0)
         dup2(pipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
         
+        #if targetEnvironment(simulator)
+        print("(simulator) app preview; device pairing and Cryptexd disabled")
+        #else
         // fix file picker
         let fixMethod = class_getInstanceMethod(UIDocumentPickerViewController.self, #selector(UIDocumentPickerViewController.fix_init(forOpeningContentTypes:asCopy:)))!
         let origMethod = class_getInstanceMethod(UIDocumentPickerViewController.self, #selector(UIDocumentPickerViewController.init(forOpeningContentTypes:asCopy:)))!
         method_exchangeImplementations(origMethod, fixMethod)
         
         setup_heartbeat()
+        #endif
     }
     
     var body: some Scene {

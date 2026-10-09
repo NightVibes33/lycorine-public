@@ -21,6 +21,12 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text("iOS 26.0 - Latest (arm64e)")
                         .foregroundStyle(.secondary)
+                    #if targetEnvironment(simulator)
+                    Label("Simulator only · signing unavailable", systemImage: "info.circle")
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .accessibilityIdentifier("lycorine.simulator.warning")
+                    #endif
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,6 +47,12 @@ struct ContentView: View {
                 .modifier(SectionPlatter())
                 
                 VStack {
+                    #if targetEnvironment(simulator)
+                    Label("Jailbreak requires a physical iPhone", systemImage: "iphone.slash")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("lycorine.simulator.jailbreak-disabled")
+                    #else
                     if isJailbroken {
                         Button {
                             
@@ -82,6 +94,7 @@ struct ContentView: View {
                         .buttonStyle(TranslucentButtonStyle())
                         .disabled(install.isWorking)
                     }
+                    #endif
                 }
             }
             .padding(.horizontal, 35)
@@ -92,7 +105,10 @@ struct ContentView: View {
             .sheet(isPresented: $showApps) {
                 AppsView()
             }
-            .onAppear(perform: { // i'm sorry there's probably a better way to do this
+            .onAppear(perform: {
+                #if targetEnvironment(simulator)
+                print("(simulator) UI smoke test only; no hardware Cryptexd or Apple TSS path")
+                #else
                 do {
                     let installedCryptexes = try cryptex_service.shared.list_installed()
                     isJailbroken = installedCryptexes.contains(where: { $0.identifier == "com.saccharine.lycorine.recovery"})
@@ -112,6 +128,7 @@ struct ContentView: View {
                     isJailbroken = false
                     print("(app) overrode jailbreak state to false")
                 }
+                #endif
             })
         }
     }
