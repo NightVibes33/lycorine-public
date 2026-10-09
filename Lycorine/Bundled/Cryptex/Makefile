@@ -1,27 +1,12 @@
+# Reconstructed overlay: original public targets plus read-only diagnostics
+# and documented research-device-only personalization.
 SHELL := /bin/zsh
 .DEFAULT_GOAL := all
-
 PROJECT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 SCRIPT := /bin/zsh $(PROJECT_DIR)/scripts/build.sh
 
-.PHONY: all fetch build image bundle clean distclean
-
+.PHONY: all doctor fetch build audit image personalize bundle clean distclean
 all: image
 
-fetch:
-	@$(SCRIPT) fetch
-
-build:
-	@$(SCRIPT) build
-
-image:
-	@$(SCRIPT) image
-
-bundle:
-	@$(SCRIPT) bundle
-
-clean:
-	@$(SCRIPT) clean
-
-distclean:
-	@$(SCRIPT) distclean
+doctor fetch build audit image personalize bundle clean distclean:
+	@$(SCRIPT) $@

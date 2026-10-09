@@ -1,0 +1,18 @@
+# Reconstruction only: NOT hrtowii's original config.
+# Key-only root SSH, on a nonstandard port to avoid conflicting with other services.
+Port 2222
+AddressFamily any
+HostKey /var/root/.ssh/lycorine_ssh_host_ed25519_key
+AuthorizedKeysFile /var/root/.ssh/authorized_keys
+PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitEmptyPasswords no
+StrictModes yes
+UsePAM no
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+PermitUserEnvironment no
+PrintMotd no

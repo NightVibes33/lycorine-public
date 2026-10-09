@@ -1,0 +1,43 @@
+name: Lycorine reconstruction (offline only)
+
+on:
+  push:
+    paths:
+      - 'Lycorine/Bundled/Cryptex/Makefile'
+      - 'Lycorine/Bundled/Cryptex/scripts/build.sh'
+      - 'Lycorine/Bundled/Cryptex/scripts/audit_payload.py'
+      - 'Lycorine/Bundled/Cryptex/scripts/verify_assets.py'
+      - 'Lycorine/Bundled/Cryptex/config/sshd_config.reconstructed'
+      - 'tests/**'
+      - '.github/workflows/lycorine-reconstruction.yml'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-validation:
+    name: Offline checks (not signing or jailbreak)
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Shell syntax
+        run: |
+          bash -n Lycorine/Bundled/Cryptex/scripts/build.sh
+          if command -v zsh >/dev/null; then
+            zsh -n Lycorine/Bundled/Cryptex/scripts/build.sh
+          fi
+      - name: Offline tests with mock Apple tools
+        run: python -m unittest discover -s tests -v
+      - name: Scope warning
+        run: |
+          echo 'Offline workflow; no Apple TSS authorization or iOS execution is tested.'
