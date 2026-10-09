@@ -54,6 +54,85 @@ jobs:
           APP="$RUNNER_TEMP/lycorine-derived/Build/Products/Release-iphoneos/Lycorine.app"
           if [ -d "$APP" ]; then
             /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist"
+            /usr/libexec/PlistBuddy -c 'Print UIFileSharingEnabled' "$APP/Info.plist" | grep -qi '^true
+            echo "This unsigned build is NOT a jailbreak or an Apple-authorized research cryptex."
+          else
+            echo "No completed app bundle was produced. Check compiler/package diagnostics."
+          fi
+      - name: Package unsigned IPA (UI and diagnostics only)
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/lycorine-derived/Build/Products/Release-iphoneos/Lycorine.app"
+          test -f "$APP/Lycorine"
+          mkdir -p "$RUNNER_TEMP/lycorine-ipa/Payload"
+          ditto "$APP" "$RUNNER_TEMP/lycorine-ipa/Payload/Lycorine.app"
+          (
+            cd "$RUNNER_TEMP/lycorine-ipa"
+            /usr/bin/zip -qry "$GITHUB_WORKSPACE/Lycorine-unsigned-UI-only.ipa" Payload
+          )
+          /usr/bin/unzip -tq "$GITHUB_WORKSPACE/Lycorine-unsigned-UI-only.ipa"
+          echo 'Unsigned IPA contains no usable jailbreak or custom Apple-signed cryptex.'
+      - name: Upload unsigned diagnostic IPA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lycorine-unsigned-UI-only
+          path: Lycorine-unsigned-UI-only.ipa
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload compiler logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lycorine-unsigned-xcode-logs
+          path: |
+            ${{ runner.temp }}/lycorine-spm.log
+            ${{ runner.temp }}/lycorine-xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 7
+
+            /usr/libexec/PlistBuddy -c 'Print LSSupportsOpeningDocumentsInPlace' "$APP/Info.plist" | grep -qi '^true
+            echo "This unsigned build is NOT a jailbreak or an Apple-authorized research cryptex."
+          else
+            echo "No completed app bundle was produced. Check compiler/package diagnostics."
+          fi
+      - name: Package unsigned IPA (UI and diagnostics only)
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="$RUNNER_TEMP/lycorine-derived/Build/Products/Release-iphoneos/Lycorine.app"
+          test -f "$APP/Lycorine"
+          mkdir -p "$RUNNER_TEMP/lycorine-ipa/Payload"
+          ditto "$APP" "$RUNNER_TEMP/lycorine-ipa/Payload/Lycorine.app"
+          (
+            cd "$RUNNER_TEMP/lycorine-ipa"
+            /usr/bin/zip -qry "$GITHUB_WORKSPACE/Lycorine-unsigned-UI-only.ipa" Payload
+          )
+          /usr/bin/unzip -tq "$GITHUB_WORKSPACE/Lycorine-unsigned-UI-only.ipa"
+          echo 'Unsigned IPA contains no usable jailbreak or custom Apple-signed cryptex.'
+      - name: Upload unsigned diagnostic IPA
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lycorine-unsigned-UI-only
+          path: Lycorine-unsigned-UI-only.ipa
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload compiler logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lycorine-unsigned-xcode-logs
+          path: |
+            ${{ runner.temp }}/lycorine-spm.log
+            ${{ runner.temp }}/lycorine-xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 7
+
+            echo "Files document sharing: validated in compiled Info.plist"
             file "$APP/Lycorine" || true
             echo "This unsigned build is NOT a jailbreak or an Apple-authorized research cryptex."
           else
