@@ -35,7 +35,15 @@ struct LycorineApp: App {
     
     init() {
         setvbuf(stdout, nil, _IONBF, 0)
+        setvbuf(stderr, nil, _IONBF, 0)
         dup2(pipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
+        dup2(pipe.fileHandleForWriting.fileDescriptor, STDERR_FILENO)
+        LycorineDiagnosticLog.shared.start(reading: pipe)
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "unknown"
+        print("(diagnostics) launch version=\(version) build=\(build) iOS=\(UIDevice.current.systemVersion)")
+        print("(diagnostics) Files: On My iPhone > Lycorine > Lycorine-Logs > latest.log")
+        print("(diagnostics) Documents sharing enabled; pairingFile.plist contains sensitive credentials")
         
         #if targetEnvironment(simulator)
         print("(simulator) app preview; device pairing and Cryptexd disabled")
