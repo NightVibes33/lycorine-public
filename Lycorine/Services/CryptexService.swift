@@ -71,6 +71,12 @@ final class cryptex_service {
         address.sin_family = sa_family_t(AF_INET)
         let tunnelHost = LycorineRSD.host
         let tunnelPort = LycorineRSD.port
+        // Raw RPPairing starts a new tunnel against a Bonjour-advertised
+        // pairing listener; an active LocalDevVPN RSD socket is DIFFERENT.
+        // Do not send a new RPPairing handshake to an already-tunneled RSD port.
+        if tunnelHost == HeartbeatManager.shared.ipAddress {
+            throw cryptex_err(msg: "Wrong protocol: \(tunnelHost) is the existing LocalDevVPN RSD tunnel. This bundled iDevice API requires a direct _remotepairing._tcp LAN listener. In Settings discover this iPhone's direct IPv4 and port. Keep your VPN running; Apple TSS has not been contacted.")
+        }
         address.sin_port = CFSwapInt16HostToBig(tunnelPort)
         guard inet_pton(AF_INET, tunnelHost, &address.sin_addr) == 1 else {
             throw cryptex_err(msg: "Invalid RSD IPv4 address in Settings (\(tunnelHost)).")

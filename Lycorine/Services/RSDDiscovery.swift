@@ -6,6 +6,7 @@ struct RSDDiscoveredService: Identifiable {
     let name: String
     let host: String
     let port: Int
+    let ipv4: String?
     var id: String { "\(name)|\(host)|\(port)" }
 }
 
@@ -50,14 +51,26 @@ final class RSDDiscovery: NSObject, ObservableObject, NetServiceBrowserDelegate,
         let port = sender.port
         let name = sender.name
         let host = sender.hostName ?? "host unknown"
+        let ipv4: String? = sender.addresses?.compactMap { address in
+            address.withUnsafeBytes { raw -> String? in
+                guard let pointer = raw.baseAddress,
+                      raw.count >= MemoryLayout<sockaddr_in>.size else { return nil }
+                let socket = pointer.assumingMemoryBound(to: sockaddr.self)
+                guard Int32(socket.pointee.sa_family) == AF_INET else { return nil }
+                var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                let code = getnameinfo(socket, socklen_t(raw.count), &hostBuffer,
+                    socklen_t(hostBuffer.count), nil, 0, NI_NUMERICHOST)
+                return code == 0 ? String(cString: hostBuffer) : nil
+            }
+        }.first
         DispatchQueue.main.async {
             guard self.isSearching, (1...65535).contains(port) else { return }
-            let found = RSDDiscoveredService(name: name, host: host, port: port)
+            let found = RSDDiscoveredService(name: name, host: host, port: port, ipv4: ipv4)
             if !self.services.contains(where: { $0.id == found.id }) {
                 self.services.append(found)
                 self.services.sort { $0.name < $1.name }
             }
-            self.status = "\(self.services.count) remote pairing service(s). Select the one associated with this device."
+            self.status = "\(self.services.count) remote pairing service(s). Choose this iPhone’s LAN IPv4/port (not its VPN tunnel endpoint)."
         }
     }
 
