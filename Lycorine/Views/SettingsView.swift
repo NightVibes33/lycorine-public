@@ -35,6 +35,7 @@ struct SettingsView: View {
     @State private var pairingStatus = "Not checked"
     @State private var rsdStatus = "Not tested"
     @State private var testing = false
+    @StateObject private var discovery = RSDDiscovery()
     @AppStorage("lycorine.rsd.host") private var rsdHost = "10.7.0.1"
     @AppStorage("lycorine.rsd.port") private var rsdPort = 49152
 
@@ -48,6 +49,28 @@ struct SettingsView: View {
                     TextField("RSD port", value: $rsdPort, format: .number)
                         .keyboardType(.numberPad)
                     Text("Defaults: 10.7.0.1:49152. Change these only to match your active tunnel. A pairing file does not start a VPN.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Discover RemotePair port") { discovery.start() }
+                    if discovery.isSearching {
+                        Button("Stop discovering") { discovery.stop() }
+                    }
+                    Text(discovery.status)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    ForEach(discovery.services) { service in
+                        Button {
+                            rsdPort = service.port
+                            rsdStatus = "Selected TCP \(service.port) from \(service.name). Verify this is your iPhone, then test RSD."
+                        } label: {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(service.name)
+                                Text("\(service.host) · TCP \(service.port)")
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    Text("Bonjour can discover nearby devices. Selecting a port doesn't validate the device or change your VPN tunnel IP.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Button(testing ? "Testing RSD..." : "Test RSD / Cryptexd connection") {
@@ -100,6 +123,7 @@ struct SettingsView: View {
             }
         }
         .onAppear { refreshPairing() }
+        .onDisappear { discovery.stop() }
         .fileImporter(isPresented: $showImporter,
                       allowedContentTypes: [.xmlPropertyList, .propertyList, .mobiledevicepairing]) { result in
             switch result {

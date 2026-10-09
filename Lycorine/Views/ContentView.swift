@@ -12,6 +12,7 @@ struct ContentView: View {
     @AppStorage("shouldUninstall") private var shouldUninstall = false
     
     @State private var isJailbroken = false
+    @State private var hasSignedCryptex = false
     @State private var showTSSPicker = false
     @State private var isRequestingTSS = false
     @State private var tssStatus = "No TSS request performed"
@@ -84,6 +85,7 @@ struct ContentView: View {
                                 let response = try await LycorineTSS.shared.requestFresh(file)
                                 tssStatus = "Apple returned a ticket (not installed or device-verified). Report: \(response.diagnostics.lastPathComponent)"
                                 tssReport = response.diagnostics
+                                hasSignedCryptex = true
                             } catch {
                                 tssStatus = error.localizedDescription
                                 tssReport = LycorineTSS.failureReport(error.localizedDescription)
@@ -125,6 +127,11 @@ struct ContentView: View {
                         .buttonStyle(TranslucentButtonStyle())
                         .disabled(install.isWorking)
                     } else {
+                        if !hasSignedCryptex {
+                            Label("No signed Lycorine Cryptex available.", systemImage: "exclamationmark.shield")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        }
                         Button {
                             withAnimation(.easeInOut(duration: 0.4)) {
                                 showLogs = true
@@ -135,11 +142,11 @@ struct ContentView: View {
                             if install.isWorking {
                                 ButtonLabel("Jailbreaking...", symbol: "showMeProgressPlease")
                             } else {
-                                ButtonLabel("Jailbreak", symbol: "lock.open")
+                                ButtonLabel(hasSignedCryptex ? "Jailbreak" : "Signed Cryptex Required", symbol: "lock.open")
                             }
                         }
                         .buttonStyle(TranslucentButtonStyle())
-                        .disabled(install.isWorking)
+                        .disabled(install.isWorking || !hasSignedCryptex)
                     }
                     #endif
                 }
@@ -160,6 +167,11 @@ struct ContentView: View {
                 // RSD is checked explicitly from Settings so a missing VPN is actionable.
                 print("(app) RSD inventory unverified; check connection in Settings")
                 isJailbroken = false
+                let candidate = Bundle.main.resourceURL?.appendingPathComponent(
+                    "com.saccharine.lycorine.recovery.cxbd.signed", isDirectory: true
+                )
+                hasSignedCryptex = LycorineTSS.savedBundle() != nil ||
+                    (candidate.map { FileManager.default.fileExists(atPath: $0.path) } ?? false)
                 
                 if isDebugBuild {
                     // REMOVE IN PROD!!!!!
