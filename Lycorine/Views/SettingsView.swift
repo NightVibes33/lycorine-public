@@ -35,6 +35,9 @@ struct SettingsView: View {
     @State private var pairingStatus = "Not checked"
     @State private var rsdStatus = "Not tested"
     @State private var testing = false
+    @State private var checkingTCP = false
+    @State private var tcpStatus = "Not tested"
+    @State private var recordDetails = ""
     @StateObject private var discovery = RSDDiscovery()
     @AppStorage("lycorine.rsd.host") private var rsdHost = "10.7.0.1"
     @AppStorage("lycorine.rsd.port") private var rsdPort = 49152
@@ -73,6 +76,22 @@ struct SettingsView: View {
                     Text("Bonjour may also discover other devices. Select your iPhone’s service only. Do not change your working LocalDevVPN Device IP when using its tunnel.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+
+                    Button(checkingTCP ? "Checking TCP..." : "Test TCP endpoint (no pairing)") {
+                        let host = LycorineRSD.host
+                        let port = LycorineRSD.port
+                        checkingTCP = true
+                        tcpStatus = "Connecting to (host):(port) without pairing..."
+                        DispatchQueue.global(qos: .utility).async {
+                            let result = LycorineTCPProbe.check(host: host, port: port)
+                            DispatchQueue.main.async {
+                                tcpStatus = result
+                                checkingTCP = false
+                            }
+                        }
+                    }
+                    .disabled(checkingTCP || !(1...65535).contains(rsdPort))
+                    Text(tcpStatus).font(.caption.monospaced()).textSelection(.enabled)
                     Button(testing ? "Testing RSD..." : "Test RSD / Cryptexd connection") {
                         testing = true
                         rsdStatus = "Connecting to \(LycorineRSD.host):\(LycorineRSD.port)…"
@@ -96,6 +115,9 @@ struct SettingsView: View {
                 }
                 Section("Pairing") {
                     Text(pairingStatus).font(.caption)
+                    Text(recordDetails).font(.caption).foregroundStyle(.secondary)
+                    Text("Importing a valid plist only verifies its format. It does not establish that this iPhone still trusts its Ed25519 key.")
+                        .font(.caption).foregroundStyle(.secondary)
                     if hasPairingFile {
                         Button("Remove Pairing File", role: .destructive) {
                             try? FileManager.default.removeItem(atPath: HeartbeatManager.pairingFile())
@@ -157,6 +179,16 @@ struct SettingsView: View {
 
     private func refreshPairing() {
         hasPairingFile = LycorineRSD.pairingValid()
+        if let bytes = try? Data(contentsOf: URL(fileURLWithPath: HeartbeatManager.pairingFile())),
+           let plist = try? PropertyListSerialization.propertyList(from: bytes, format: nil),
+           let dict = plist as? [String: Any] {
+            let hasAltIRK = (dict["alt_irk"] as? Data)?.count == 16
+            recordDetails = hasAltIRK
+                ? "Record has an alt_irk identity key; device matching has not been verified."
+                : "Record has no 16-byte alt_irk identity key; it may be a legacy or unverified pairing record."
+        } else {
+            recordDetails = "No readable remote-pairing metadata."
+        }
         pairingStatus = hasPairingFile
             ? "Pairing record parses correctly; device/tunnel acceptance not yet verified."
             : (FileManager.default.fileExists(atPath: HeartbeatManager.pairingFile())
