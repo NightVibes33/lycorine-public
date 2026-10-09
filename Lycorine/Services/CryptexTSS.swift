@@ -48,6 +48,24 @@ final class LycorineTSS {
         let path = base.appendingPathComponent(signedName, isDirectory: true)
         return FileManager.default.fileExists(atPath: path.path) ? path : nil
     }
+    static func failureReport(_ reason: String) -> URL? {
+        guard let base = try? baseFolder() else { return nil }
+        let destination = base.appendingPathComponent("tss-failure-\(UUID().uuidString).txt")
+        let sanitized = String(reason.prefix(500)).replacingOccurrences(
+            of: "[0-9A-Fa-f]{16,}", with: "[redacted]", options: .regularExpression
+        )
+        let lines = [
+            "Cryptex1 request did NOT produce an authorized ticket.",
+            "Failure: \(sanitized)",
+            "Nothing installed or code-signed.",
+            "Raw TSS response, nonce, ECID and ticket bytes intentionally omitted."
+        ]
+        do {
+            try lines.joined(separator: "\n").write(
+                to: destination, atomically: true, encoding: .utf8)
+            return destination
+        } catch { return nil }
+    }
     private static func loadManifest(_ folder: URL) throws -> [String: Any] {
         let base = folder.appendingPathComponent("Restore", isDirectory: true)
             .resolvingSymlinksInPath().standardizedFileURL

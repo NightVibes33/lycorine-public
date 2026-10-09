@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var showTSSPicker = false
     @State private var isRequestingTSS = false
     @State private var tssStatus = "No TSS request performed"
+    @State private var tssReport: URL?
     
     var body: some View {
         NavigationStack {
@@ -54,6 +55,12 @@ struct ContentView: View {
                     Text("Cryptex1 TSS authorization").font(.headline)
                     Text(tssStatus).font(.caption).foregroundStyle(.secondary)
                         .textSelection(.enabled)
+                    if let report = tssReport {
+                        ShareLink(item: report) {
+                            Label("Export TSS diagnostics", systemImage: "square.and.arrow.up")
+                                .font(.caption)
+                        }
+                    }
                     #if targetEnvironment(simulator)
                     Text("Requires a physical iPhone").font(.caption)
                     #else
@@ -70,13 +77,16 @@ struct ContentView: View {
                         tssStatus = error.localizedDescription
                     case .success(let file):
                         isRequestingTSS = true
+                        tssReport = nil
                         tssStatus = "Checking SHA-384, current nonce and Apple authorization..."
                         Task {
                             do {
                                 let response = try await LycorineTSS.shared.requestFresh(file)
                                 tssStatus = "Apple returned a ticket (not installed or device-verified). Report: \(response.diagnostics.lastPathComponent)"
+                                tssReport = response.diagnostics
                             } catch {
                                 tssStatus = error.localizedDescription
+                                tssReport = LycorineTSS.failureReport(error.localizedDescription)
                                 print("(tss) \(error.localizedDescription)")
                             }
                             isRequestingTSS = false
