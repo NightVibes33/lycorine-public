@@ -34,3 +34,11 @@ To run mock-backed offline tests:
 ```sh
 python3 -m unittest discover -s tests -v
 ```
+
+## RSD compatibility and troubleshooting (October 2026)
+
+This fork no longer treats iOS 27 beta 4 as the only supported build. The minimum deployment target remains iOS 18; the app probes the actual RSD and cryptexd services at runtime. API availability and the firmware's signing policy may vary on earlier and later releases. There is **no claim of a working code-signing exploit on all firmware versions**.
+
+The RSD tunnel uses a local VPN endpoint, default `10.7.0.1:49152`, now configurable in Settings. Import validates that the supplied pairing file parses as a remote-pairing record; the separate **Test RSD / Cryptexd connection** operation verifies the active tunnel. A socket reset at handshake is a transport or remote-pairing failure, **not** an Apple TSS rejection. The previous "starting heartbeat" log was misleading: the IDeviceKit heartbeat library does not use that path for iOS 17.4+ RSD.
+
+A legitimate Apple-signed Lycorine cryptex is still required to proceed with a privileged install. The public code and Xcode success do not replace the patched Apple TSS authorization flaw.

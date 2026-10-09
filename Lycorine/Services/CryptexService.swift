@@ -57,8 +57,10 @@ final class cryptex_service {
     func withCryptexd<T>(_ operation: (OpaquePointer) throws -> T) throws -> T {
         let pairingPath = HeartbeatManager.pairingFile()
         guard FileManager.default.fileExists(atPath: pairingPath) else {
-            throw cryptex_err(msg: "Pairing file missing. Pair through a supported local-device connection first.")
+            throw cryptex_err(msg: "No pairing record. Import a valid RSD pairing file in Settings.")
         }
+        // The pairing file and reachable RSD endpoint are separate prerequisites.
+        // A file existing on disk is NOT proof the device accepted its credentials.
 
         var pairing: OpaquePointer?
         try Self.check(rp_pairing_file_read(pairingPath, &pairing), "read RSD pairing")
@@ -67,9 +69,11 @@ final class cryptex_service {
 
         var address = sockaddr_in()
         address.sin_family = sa_family_t(AF_INET)
-        address.sin_port = CFSwapInt16HostToBig(49152)
-        guard inet_pton(AF_INET, HeartbeatManager.shared.ipAddress, &address.sin_addr) == 1 else {
-            throw cryptex_err(msg: "Invalid RSD tunnel address")
+        let tunnelHost = LycorineRSD.host
+        let tunnelPort = LycorineRSD.port
+        address.sin_port = CFSwapInt16HostToBig(tunnelPort)
+        guard inet_pton(AF_INET, tunnelHost, &address.sin_addr) == 1 else {
+            throw cryptex_err(msg: "Invalid RSD IPv4 address in Settings (\(tunnelHost)).")
         }
 
         var adapter: OpaquePointer?
@@ -82,7 +86,11 @@ final class cryptex_service {
                 )
             }
         }
-        try Self.check(tunnelError, "open RSD tunnel")
+        if let tunnelError {
+            let message = tunnelError.pointee.message.map { String(cString: $0) } ?? "unknown connection error"
+            idevice_error_free(tunnelError)
+            throw cryptex_err(msg: "RSD handshake at \(tunnelHost):\(tunnelPort) failed: \(message). Check LocalDevVPN is active, confirm the host/port in Settings, and verify the RSD pairing record. A reset does not indicate a TSS rejection.")
+        }
         guard let adapter, let handshake else {
             throw cryptex_err(msg: "RSD did not return an adapter and handshake")
         }
@@ -125,7 +133,7 @@ final class cryptex_service {
         let bundled = Bundle.main.resourceURL?.appendingPathComponent(name, isDirectory: true)
         guard let root = LycorineTSS.savedBundle() ?? bundled,
               FileManager.default.fileExists(atPath: root.path) else {
-            throw cryptex_err(msg: "No Apple-authorized signed Lycorine cryptex is bundled. Public source omits its TSS signing implementation.")
+            throw cryptex_err(msg: "No signed Lycorine cryptex is available. Import a research cryptex and request fresh TSS authorization first; Apple's patched authorization policy may refuse it. This is separate from RSD connectivity.")
         }
 
         let restore = root.appendingPathComponent("Restore", isDirectory: true)

@@ -65,9 +65,15 @@ struct LycorineApp: App {
             return
         }
         
-        print("(launch) starting heartbeat")
+        if HeartbeatManager.shared.isRsd {
+            print("(launch) RSD mode: direct per-command tunnel; heartbeat is not used")
+            print("(launch) Open Settings > Test RSD to verify the active LocalDevVPN tunnel")
+            return
+        }
+
+        print("(launch) starting legacy Lockdown heartbeat")
         HeartbeatManager.shared.start()
-        
+
         DispatchQueue.global(qos: .utility).async {
             do {
                 let installed = try cryptex_service.shared.list_installed()

@@ -24,7 +24,7 @@ struct ContentView: View {
                     Text("Lycorine")
                         .font(.largeTitle.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("iOS 26.0 - Latest (arm64e)")
+                    Text("iOS 26+ research · verify services per build")
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     #if targetEnvironment(simulator)
@@ -156,18 +156,10 @@ struct ContentView: View {
                 #if targetEnvironment(simulator)
                 print("(simulator) UI smoke test only; no hardware Cryptexd or Apple TSS path")
                 #else
-                do {
-                    let installedCryptexes = try cryptex_service.shared.list_installed()
-                    isJailbroken = installedCryptexes.contains(where: { $0.identifier == "com.saccharine.lycorine.recovery"})
-                    
-                    if isJailbroken {
-                        print("(app) cryptex is installed, assuming jailbroken")
-                    } else {
-                        print("(app) cryptex is not installed, assuming not jailbroken")
-                    }
-                } catch {
-                    print("(app) failed to detect jailbreak status")
-                }
+                // Do not synchronously connect to RSD on the SwiftUI main thread.
+                // RSD is checked explicitly from Settings so a missing VPN is actionable.
+                print("(app) RSD inventory unverified; check connection in Settings")
+                isJailbroken = false
                 
                 if isDebugBuild {
                     // REMOVE IN PROD!!!!!

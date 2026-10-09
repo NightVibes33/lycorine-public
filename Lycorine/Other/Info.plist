@@ -22,7 +22,11 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSBonjourServices</key>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>localdevvpn</string>
+    </array>
+    <key>NSBonjourServices</key>
 	<array>
 		<string>_remotepairing._tcp</string>
 	</array>
