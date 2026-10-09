@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UniformTypeIdentifiers
 
 /// The log reader is started in LycorineApp, not in this view.
 struct LogView: View {
