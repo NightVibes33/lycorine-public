@@ -51,10 +51,13 @@ jobs:
         if: always()
         shell: bash
         run: |
+          set -euo pipefail
           APP="$RUNNER_TEMP/lycorine-derived/Build/Products/Release-iphoneos/Lycorine.app"
           if [ -d "$APP" ]; then
             /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist"
-            /usr/libexec/PlistBuddy -c 'Print UIFileSharingEnabled' "$APP/Info.plist" | grep -qi '^true
+            /usr/libexec/PlistBuddy -c 'Print UIFileSharingEnabled' "$APP/Info.plist" | grep -qi true
+            /usr/libexec/PlistBuddy -c 'Print LSSupportsOpeningDocumentsInPlace' "$APP/Info.plist" | grep -qi true
+            echo "Compiled Info.plist contains both Files-sharing settings"
             echo "This unsigned build is NOT a jailbreak or an Apple-authorized research cryptex."
           else
             echo "No completed app bundle was produced. Check compiler/package diagnostics."
