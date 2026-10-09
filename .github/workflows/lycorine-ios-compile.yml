@@ -1,0 +1,71 @@
+name: Lycorine iOS app compile (unsigned; no jailbreak)
+
+on:
+  push:
+    paths:
+      - 'Lycorine/**'
+      - 'Lycorine.xcodeproj/**'
+      - '.github/workflows/lycorine-ios-compile.yml'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xcode-ios-compile:
+    name: Compile iOS app (no TSS / signing)
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode environment
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+      - name: Resolve public Swift packages
+        run: |
+          set -o pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project Lycorine.xcodeproj \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/lycorine-spm" \
+            2>&1 | tee "$RUNNER_TEMP/lycorine-spm.log"
+      - name: Compile unsigned app for device
+        id: build
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Lycorine.xcodeproj \
+            -scheme Lycorine \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -clonedSourcePackagesDirPath "$RUNNER_TEMP/lycorine-spm" \
+            -derivedDataPath "$RUNNER_TEMP/lycorine-derived" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' \
+            2>&1 | tee "$RUNNER_TEMP/lycorine-xcodebuild.log"
+      - name: Validate app bundle (if available)
+        if: always()
+        shell: bash
+        run: |
+          APP="$RUNNER_TEMP/lycorine-derived/Build/Products/Release-iphoneos/Lycorine.app"
+          if [ -d "$APP" ]; then
+            /usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist"
+            file "$APP/Lycorine" || true
+            echo "This unsigned build is NOT a jailbreak or an Apple-authorized research cryptex."
+          else
+            echo "No completed app bundle was produced. Check compiler/package diagnostics."
+          fi
+      - name: Upload compiler logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lycorine-unsigned-xcode-logs
+          path: |
+            ${{ runner.temp }}/lycorine-spm.log
+            ${{ runner.temp }}/lycorine-xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 7
