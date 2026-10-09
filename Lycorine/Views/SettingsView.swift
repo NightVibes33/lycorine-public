@@ -48,10 +48,10 @@ struct SettingsView: View {
                         .autocorrectionDisabled()
                     TextField("RSD port", value: $rsdPort, format: .number)
                         .keyboardType(.numberPad)
-                    Text("Use the direct _remotepairing._tcp device address/port here. Your existing LocalDevVPN tunnel at 10.7.0.1 speaks RSD, not this RemotePairing protocol. No VPN restart needed.")
+                    Text("With LocalDevVPN already active, keep its Device IP (usually 10.7.0.1). Use the current _remotepairing._tcp port discovered for this iPhone; it may change after reboot.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Button("Discover direct RemotePairing endpoint") { discovery.start() }
+                    Button("Discover current RemotePairing port") { discovery.start() }
                     if discovery.isSearching {
                         Button("Stop discovering") { discovery.stop() }
                     }
@@ -60,22 +60,17 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                     ForEach(discovery.services) { service in
                         Button {
-                            guard let ipv4 = service.ipv4 else {
-                                rsdStatus = "No LAN IPv4 for this service. Enter its IPv4 address manually."
-                                return
-                            }
-                            rsdHost = ipv4
                             rsdPort = service.port
-                            rsdStatus = "Selected \(ipv4):\(service.port) from \(service.name). Verify it is your iPhone, then test."
+                            rsdStatus = "Selected RemotePair port \(service.port) from \(service.name), retaining VPN Device IP \(LycorineRSD.host). Verify this belongs to your iPhone, then Test RSD."
                         } label: {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(service.name)
-                                Text("\(service.ipv4 ?? service.host) · TCP \(service.port)")
+                                Text("\(service.host) · TCP \(service.port)")
                                     .font(.caption)
                             }
                         }
                     }
-                    Text("Bonjour can discover other devices. Verify this is your iPhone. Discovery sets the direct device LAN IP and port together; it does not change your VPN.")
+                    Text("Bonjour may also discover other devices. Select your iPhone’s service only. Do not change your working LocalDevVPN Device IP when using its tunnel.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Button(testing ? "Testing RSD..." : "Test RSD / Cryptexd connection") {

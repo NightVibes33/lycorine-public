@@ -42,3 +42,7 @@ This fork no longer treats iOS 27 beta 4 as the only supported build. The minimu
 The RSD tunnel uses a local VPN endpoint, default `10.7.0.1:49152`, now configurable in Settings. Import validates that the supplied pairing file parses as a remote-pairing record; the separate **Test RSD / Cryptexd connection** operation verifies the active tunnel. A socket reset at handshake is a transport or remote-pairing failure, **not** an Apple TSS rejection. The previous "starting heartbeat" log was misleading: the IDeviceKit heartbeat library does not use that path for iOS 17.4+ RSD.
 
 A legitimate Apple-signed Lycorine cryptex is still required to proceed with a privileged install. The public code and Xcode success do not replace the patched Apple TSS authorization flaw.
+
+### LocalDevVPN / iOS 27 correction
+
+LocalDevVPN can forward the **raw RemotePairing** service at a VPN Device IP such as `10.7.0.1`. The packaged iDevice FFI's `tunnel_create_rppairing` can therefore be used with this VPN address **provided the correct current RemotePairing port and a valid pairing record**. A stale default port (e.g. `49152`) can produce resets even with the VPN connected. The Settings Bonjour discovery changes the **port only** and preserves the configured VPN address. Verify the selected advertised service belongs to this iPhone. Apple TSS authorization is independent of RSD connectivity.
