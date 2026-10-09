@@ -1,0 +1,4 @@
+# name|version|url
+toybox|0.8.14|https://landley.net/toybox/downloads/toybox-0.8.14.tar.gz
+openssh|9.7p1|https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.7p1.tar.gz
+openssl|3.2.1|https://www.openssl.org/source/openssl-3.2.1.tar.gz

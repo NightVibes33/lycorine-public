@@ -1,0 +1,11 @@
+/build/
+*Build*
+.theos/
+*.ipa
+*.md
+vendor/
+!README.md
+.DS_Store
+xcuserdata/
+xcshareddata/
+*.xcuserstate

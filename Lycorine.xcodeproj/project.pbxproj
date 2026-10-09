@@ -1,0 +1,718 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		15B21D2A306D9842000F1338 /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 15B21D29306D9842000F1338 /* FluidGradient */; };
+		CCADCEA3306A438600B1DC1C /* IDevice in Frameworks */ = {isa = PBXBuildFile; productRef = CCADCEA2306A438600B1DC1C /* IDevice */; };
+		CCADCEA5306A438600B1DC1C /* IDeviceSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CCADCEA4306A438600B1DC1C /* IDeviceSwift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		43DD4E57306A53FC00D57DBD /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C83D0142306244C800457510 /* ExecMainBinary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExecMainBinary.xcodeproj; sourceTree = "<group>"; };
+		C83D977330623F2200457510 /* ExecMainBinary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExecMainBinary.xcodeproj; sourceTree = "<group>"; };
+		C83D97B23062415400457510 /* ExecMainBinary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ExecMainBinary.xcodeproj; sourceTree = "<group>"; };
+		C8FC11163062475B004F983B /* Lycorine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lycorine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C8FC56E93062492B004F983B /* Exceptions for "Lycorine" folder in "Lycorine" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				build/Theos/faked/build_session,
+				"build/Theos/faked/modules/BMYVTGL250GN/_AvailabilityInternal-3D4U9ULTH0M7F.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_AvailabilityInternal-3D4U9ULTH0M7F.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_inttypes-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_inttypes-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_limits-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_limits-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdarg-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdarg-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdbool-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdbool-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stddef-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stddef-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdint-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_Builtin_stdint-19KE09ZDXQ6Q3.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation1-3D4U9ULTH0M7F.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation1-3D4U9ULTH0M7F.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation2-14SXWNMU3ZLCS.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation2-14SXWNMU3ZLCS.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation3-2IM218WH22V57.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/_DarwinFoundation3-2IM218WH22V57.pcm.timestamp",
+				"build/Theos/faked/modules/BMYVTGL250GN/Darwin-1OFLEA9ZNG66V.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/Darwin-1OFLEA9ZNG66V.pcm.timestamp",
+				build/Theos/faked/modules/BMYVTGL250GN/modules.idx,
+				"build/Theos/faked/modules/BMYVTGL250GN/ptrcheck-19KE09ZDXQ6Q3.pcm",
+				"build/Theos/faked/modules/BMYVTGL250GN/ptrcheck-19KE09ZDXQ6Q3.pcm.timestamp",
+				build/Theos/faked/obj/.stamp,
+				build/Theos/faked/obj/arm64/faked,
+				build/Theos/faked/obj/arm64/faked.dSYM,
+				build/Theos/faked/obj/arm64/faked.m.dae35635.o,
+				build/Theos/faked/obj/arm64/faked.m.dae35635.Td,
+				build/Theos/faked/obj/faked,
+				Bundled/Cryptex/.gitignore,
+				Bundled/Cryptex/bootstrap/bootstrap_1900.tar.zst,
+				Bundled/Cryptex/bootstrap/overlay/README.md,
+				Bundled/Cryptex/bootstrap/overlay/var/jb/prep_bootstrap.sh,
+				Bundled/Cryptex/bootstrap/overlay/var/jb/usr/bin/uicache,
+				Bundled/Cryptex/bootstrap/overlay/var/jb/usr/libexec/defrobnicatord,
+				"Bundled/Cryptex/config/bootstrap-packages.lock",
+				"Bundled/Cryptex/config/bootstrap-required-packages.txt",
+				Bundled/Cryptex/config/BuildManifest.plist,
+				Bundled/Cryptex/config/info.plist.in,
+				Bundled/Cryptex/config/jitterd.entitlements.plist,
+				Bundled/Cryptex/config/opainject.entitlements.plist,
+				Bundled/Cryptex/config/recovery.entitlements.plist,
+				"Bundled/Cryptex/config/sileo-helper.entitlements.plist",
+				Bundled/Cryptex/config/sileo.entitlements.plist,
+				Bundled/Cryptex/config/sources.lock,
+				Bundled/Cryptex/config/sshd_config,
+				Bundled/Cryptex/config/uicache.entitlements.plist,
+				"Bundled/Cryptex/downloads/ellekit-1.2.deb",
+				"Bundled/Cryptex/downloads/libkrw0-tfp0-1.1.1-2.deb",
+				"Bundled/Cryptex/downloads/libressl-4.3.2.tar.gz",
+				"Bundled/Cryptex/downloads/opainject-1.0.6",
+				"Bundled/Cryptex/downloads/openssh-9.7p1.tar.gz",
+				"Bundled/Cryptex/downloads/openssh-10.2p1.tar.gz",
+				"Bundled/Cryptex/downloads/openssl-3.2.1.tar.gz",
+				"Bundled/Cryptex/downloads/org.coolstar.sileo-2.5.1.deb",
+				"Bundled/Cryptex/downloads/toybox-0.8.14.tar.gz",
+				Bundled/Cryptex/launchd/com.hrtowii.jitterd.plist,
+				Bundled/Cryptex/launchd/com.saccharine.lycorine.daemon.plist,
+				Bundled/Cryptex/launchd/com.saccharine.lycorine.openssh.plist,
+				Bundled/Cryptex/Makefile,
+				"Bundled/Cryptex/patches/openssh/cryptex-shell.patch",
+				Bundled/Cryptex/patches/openssh/ios.diff,
+				"Bundled/Cryptex/patches/openssh/locked-root-password.patch",
+				Bundled/Cryptex/patches/openssh/sshsigdie.patch,
+				"Bundled/Cryptex/payload/start-openssh.sh",
+				Bundled/Cryptex/README.md,
+				Bundled/Cryptex/scripts/build.sh,
+				"Bundled/Cryptex/scripts/install-deb-overlay.sh",
+				"Bundled/Cryptex/scripts/patch-launchctl.py",
+				"Bundled/Cryptex/scripts/prepare-bootstrap.sh",
+				"Bundled/Cryptex/scripts/update-dpkg-status.py",
+				"Bundled/Cryptex/scripts/wrap-gtcd.py",
+				"Bundled/Cryptex/scripts/wrap-volume.py",
+				"Bundled/Cryptex/src/cryptex-run.c",
+				Bundled/Cryptex/src/ExecMainBinary/dyld_bypass_validation.m,
+				Bundled/Cryptex/src/ExecMainBinary/entitlements.xml,
+				Bundled/Cryptex/src/ExecMainBinary/main.m,
+				Bundled/Cryptex/src/untar.c,
+				Bundled/Hooks/faked/.gitignore,
+				Bundled/Hooks/faked/entitlements.plist,
+				Bundled/Hooks/faked/faked.m,
+				Bundled/Hooks/faked/Makefile,
+				Bundled/Hooks/generalhook/.gitignore,
+				Bundled/Hooks/generalhook/assert.m,
+				Bundled/Hooks/generalhook/codesign_hooks.c,
+				Bundled/Hooks/generalhook/dyld_bypass_validation.m,
+				Bundled/Hooks/generalhook/generalhook.dylib,
+				Bundled/Hooks/generalhook/main.m,
+				Bundled/Hooks/generalhook/Makefile,
+				Bundled/Hooks/generalhook/README.md,
+				Bundled/Hooks/generalhook/sandbox_extension.m,
+				Bundled/Hooks/generalhook/setupAppBundle.m,
+				Bundled/Hooks/generalhook/tweaks.m,
+				Bundled/Hooks/jitterd/ents.plist,
+				Bundled/Hooks/jitterd/jitterd.plist,
+				Bundled/Hooks/jitterd/main.m,
+				Bundled/Hooks/jitterd/Makefile,
+				Bundled/Hooks/jitterd/process.m,
+				Bundled/Hooks/jitterd/service.m,
+				Bundled/Hooks/launchdhook/build/launchdhook.dylib,
+				Bundled/Hooks/launchdhook/build/litehook_rebind.o,
+				Bundled/Hooks/launchdhook/build/main.o,
+				Bundled/Hooks/launchdhook/hook_rebind.c,
+				Bundled/Hooks/launchdhook/hook_uspreboot.c,
+				Bundled/Hooks/launchdhook/hooks.c,
+				Bundled/Hooks/launchdhook/launch_daemons.m,
+				Bundled/Hooks/launchdhook/main.m,
+				Bundled/Hooks/launchdhook/Makefile,
+				Bundled/Hooks/launchdhook/spawn.c,
+				Bundled/Hooks/lsdhook/main.m,
+				Bundled/Hooks/lsdhook/Makefile,
+				Bundled/Hooks/PreferenceLoader27/bridge.m,
+				Bundled/Hooks/PreferenceLoader27/bridge.swift,
+				Bundled/Hooks/PreferenceLoader27/loader.m,
+				Bundled/Hooks/PreferenceLoader27/Makefile,
+				Bundled/Hooks/PreferenceLoader27/Support/LICENSE,
+				Bundled/Hooks/PreferenceLoader27/Support/PLHeap.m,
+				Bundled/Hooks/PreferenceLoader27/Support/PLSwiftMeta.m,
+				Bundled/Hooks/PreferenceLoader27/Support/PLSwiftString.swift,
+				Bundled/Hooks/PreferenceLoader27/Support/UPSTREAM.md,
+				Bundled/Hooks/README.md,
+				Bundled/Hooks/safemode/main.m,
+				Bundled/Hooks/safemode/Makefile,
+				Bundled/Hooks/Shared/ClonePaths.c,
+				Bundled/Hooks/Shared/Injection/spawn_environment.c,
+				Bundled/Hooks/Shared/JIT/client.c,
+				Bundled/Hooks/Shared/JIT/ports.c,
+				Bundled/Hooks/Shared/LaunchDaemon.m,
+				Bundled/Hooks/Shared/litehook.c,
+				Bundled/Hooks/Shared/Log.c,
+				Bundled/Hooks/Shared/Sandbox/Extensions.c,
+				Bundled/Hooks/Shared/Spawn/dispatcher.c,
+				Bundled/Hooks/Shared/Spawn/jb_binary.m,
+				Bundled/Hooks/Shared/Spawn/jit_spawn.c,
+				Bundled/Hooks/Shared/Spawn/system_clone.c,
+				Bundled/Hooks/Shared/Trust/cdhash.c,
+				Bundled/Hooks/Shared/Trust/trust_query.c,
+				Bundled/Hooks/xpcproxyhook/main.m,
+				Bundled/Hooks/xpcproxyhook/Makefile,
+				Bundled/Hooks/xpcproxyhook/spawn.c,
+				Bundled/RootHelper/Bootstrap/Bootstrap.m,
+				Bundled/RootHelper/Bootstrap/CryptexCopy.m,
+				Bundled/RootHelper/Bootstrap/JailbreakLink.c,
+				Bundled/RootHelper/Cloning/Apps/Apps.m,
+				Bundled/RootHelper/Cloning/Clone.m,
+				Bundled/RootHelper/Cloning/Entitlements/extraents.plist,
+				Bundled/RootHelper/Cloning/Entitlements/launchdentitlements.plist,
+				Bundled/RootHelper/Cloning/Signing.m,
+				Bundled/RootHelper/Cloning/Tools/cryptexctl,
+				Bundled/RootHelper/Cloning/Tools/ldid,
+				Bundled/RootHelper/Cloning/Tools/trustcachectl,
+				Bundled/RootHelper/Cloning/TrustCache.m,
+				Bundled/RootHelper/Core/Paths.m,
+				Bundled/RootHelper/Core/Spawn.m,
+				Bundled/RootHelper/Core/utils.m,
+				Bundled/RootHelper/entitlements.plist,
+				Bundled/RootHelper/IPC/Inbox.m,
+				Bundled/RootHelper/IPC/LycorineLog.m,
+				Bundled/RootHelper/main.m,
+				Bundled/RootHelper/Makefile,
+				Bundled/RootHelper/Patching/.gitignore,
+				Bundled/RootHelper/Patching/DyldGen.m,
+				Bundled/RootHelper/Patching/DyldPatch.m,
+				Bundled/RootHelper/Patching/lib/libchoma.a,
+				Bundled/RootHelper/Reboot/UserspaceReboot.m,
+				Bundled/RootHelper/RootHelper.md,
+				Bundled/Uicache/LICENSE,
+				Bundled/Uicache/Makefile,
+				Bundled/Uicache/README.md,
+				Bundled/Uicache/uicache.m,
+				Other/Info.plist,
+			);
+			target = C8FC11153062475B004F983B /* Lycorine */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		C8C4ED05306ED96A00B9737C /* Exceptions for "Lycorine" folder in "Compile Sources" phase from "Lycorine" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = C8FC11123062475B004F983B /* Sources */;
+			membershipExceptions = (
+				Bridge.h,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C8FC11173062475B004F983B /* Lycorine */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C8FC56E93062492B004F983B /* Exceptions for "Lycorine" folder in "Lycorine" target */,
+				C8C4ED05306ED96A00B9737C /* Exceptions for "Lycorine" folder in "Compile Sources" phase from "Lycorine" target */,
+			);
+			path = Lycorine;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C8FC11133062475B004F983B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CCADCEA5306A438600B1DC1C /* IDeviceSwift in Frameworks */,
+				15B21D2A306D9842000F1338 /* FluidGradient in Frameworks */,
+				CCADCEA3306A438600B1DC1C /* IDevice in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		15B21995306D935E000F1338 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				C83D97B23062415400457510 /* ExecMainBinary.xcodeproj */,
+				C83D0142306244C800457510 /* ExecMainBinary.xcodeproj */,
+				C83D977330623F2200457510 /* ExecMainBinary.xcodeproj */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		C83D018E306244C800457510 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C83D977430623F2200457510 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C83D97FE3062415400457510 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C8E72B5D3061850700E88F5E = {
+			isa = PBXGroup;
+			children = (
+				C8FC11173062475B004F983B /* Lycorine */,
+				C8FC56EA30624959004F983B /* Frameworks */,
+				C8E72B673061850700E88F5E /* Products */,
+				15B21995306D935E000F1338 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		C8E72B673061850700E88F5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C8FC11163062475B004F983B /* Lycorine.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C8FC56EA30624959004F983B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C8FC11153062475B004F983B /* Lycorine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C8FC111E3062475C004F983B /* Build configuration list for PBXNativeTarget "Lycorine" */;
+			buildPhases = (
+				C8FC11123062475B004F983B /* Sources */,
+				C8FC11133062475B004F983B /* Frameworks */,
+				C8FC11143062475B004F983B /* Resources */,
+				43DD4E57306A53FC00D57DBD /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C8FC11173062475B004F983B /* Lycorine */,
+			);
+			name = Lycorine;
+			packageProductDependencies = (
+				CCADCEA2306A438600B1DC1C /* IDevice */,
+				CCADCEA4306A438600B1DC1C /* IDeviceSwift */,
+				15B21D29306D9842000F1338 /* FluidGradient */,
+			);
+			productName = Lycorine;
+			productReference = C8FC11163062475B004F983B /* Lycorine.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C8E72B5E3061850700E88F5E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					C8FC11153062475B004F983B = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+				};
+			};
+			buildConfigurationList = C8E72B613061850700E88F5E /* Build configuration list for PBXProject "Lycorine" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C8E72B5D3061850700E88F5E;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CCADCEA1306A438600B1DC1C /* XCRemoteSwiftPackageReference "idevicekit" */,
+				15B21D28306D9842000F1338 /* XCRemoteSwiftPackageReference "FluidGradient" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C8E72B673061850700E88F5E /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C83D97FE3062415400457510 /* Products */;
+					ProjectRef = C83D97B23062415400457510 /* ExecMainBinary.xcodeproj */;
+				},
+				{
+					ProductGroup = C83D018E306244C800457510 /* Products */;
+					ProjectRef = C83D0142306244C800457510 /* ExecMainBinary.xcodeproj */;
+				},
+				{
+					ProductGroup = C83D977430623F2200457510 /* Products */;
+					ProjectRef = C83D977330623F2200457510 /* ExecMainBinary.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C8FC11153062475B004F983B /* Lycorine */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C8FC11143062475B004F983B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C8FC11123062475B004F983B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C8E72B6F3061850800E88F5E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = XYJG5XT7ZZ;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/*",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/*/*",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C8E72B703061850800E88F5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = XYJG5XT7ZZ;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/*",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/*/*",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		C8FC111F3062475C004F983B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XYJG5XT7ZZ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Lycorine/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Lycorine;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/openssl-prefix/lib",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/src/openssl/providers",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/src/openssl",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/downloads",
+					"$(PROJECT_DIR)/build/Theos/generalhook/obj/arm64",
+					"$(PROJECT_DIR)/build/Theos/generalhook/obj",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Hooks/launchdhook/build",
+					"$(PROJECT_DIR)/Lycorine/Bundled/RootHelper/Patching/lib",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Hooks/generalhook",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saccade.Lycorine;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Lycorine/Bridge.h;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C8FC11203062475C004F983B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XYJG5XT7ZZ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Lycorine/Other/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Lycorine;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/openssl-prefix/lib",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/src/openssl/providers",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/build/src/openssl",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Cryptex/downloads",
+					"$(PROJECT_DIR)/build/Theos/generalhook/obj/arm64",
+					"$(PROJECT_DIR)/build/Theos/generalhook/obj",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Hooks/launchdhook/build",
+					"$(PROJECT_DIR)/Lycorine/Bundled/RootHelper/Patching/lib",
+					"$(PROJECT_DIR)/Lycorine/Bundled/Hooks/generalhook",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.saccade.Lycorine;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = Lycorine/Bridge.h;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C8E72B613061850700E88F5E /* Build configuration list for PBXProject "Lycorine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C8E72B6F3061850800E88F5E /* Debug */,
+				C8E72B703061850800E88F5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C8FC111E3062475C004F983B /* Build configuration list for PBXNativeTarget "Lycorine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C8FC111F3062475C004F983B /* Debug */,
+				C8FC11203062475C004F983B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		15B21D28306D9842000F1338 /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cindori/FluidGradient";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		CCADCEA1306A438600B1DC1C /* XCRemoteSwiftPackageReference "idevicekit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hrtowii/idevicekit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		15B21D29306D9842000F1338 /* FluidGradient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 15B21D28306D9842000F1338 /* XCRemoteSwiftPackageReference "FluidGradient" */;
+			productName = FluidGradient;
+		};
+		CCADCEA2306A438600B1DC1C /* IDevice */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CCADCEA1306A438600B1DC1C /* XCRemoteSwiftPackageReference "idevicekit" */;
+			productName = IDevice;
+		};
+		CCADCEA4306A438600B1DC1C /* IDeviceSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CCADCEA1306A438600B1DC1C /* XCRemoteSwiftPackageReference "idevicekit" */;
+			productName = IDeviceSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C8E72B5E3061850700E88F5E /* Project object */;
+}

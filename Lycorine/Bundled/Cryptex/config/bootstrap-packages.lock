@@ -1,0 +1,6 @@
+# package|version|url|initial-dpkg-state
+# Packages are unpacked into the staged bootstrap in this order. Maintainer
+# scripts are preserved, but never executed on the build Mac.
+org.coolstar.sileo|2.5.1|https://apt.procurs.us/pool/main/iphoneos-arm64-rootless/1900/sileo/org.coolstar.sileo_2.5.1_iphoneos-arm64.deb|installed
+ellekit|1.2|https://ellekit.space/pool/ellekit_1.2_iphoneos-arm64.deb|installed
+libkrw0-tfp0|1.1.1-2|https://apt.procurs.us/pool/main/iphoneos-arm64-rootless/1900/libkrw/libkrw0-tfp0_1.1.1-2_iphoneos-arm64.deb|installed

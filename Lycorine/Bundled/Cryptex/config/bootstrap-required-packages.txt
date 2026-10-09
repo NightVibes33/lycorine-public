@@ -1,0 +1,3 @@
+# Packages that must be present in the final derived bootstrap.
+org.coolstar.sileo
+libkrw0-tfp0

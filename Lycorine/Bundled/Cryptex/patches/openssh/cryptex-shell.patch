@@ -1,0 +1,57 @@
+--- a/auth.c
++++ b/auth.c
+@@ -87,6 +87,24 @@
+ /* Debugging messages */
+ static struct sshbuf *auth_debug;
+ 
++static char *
++cryptex_root_shell(const struct passwd *pw)
++{
++	const char *mount, *shell;
++	char *path;
++
++	if (pw->pw_uid != 0 || strcmp(pw->pw_name, "root") != 0)
++		return NULL;
++	mount = getenv("CRYPTEX_MOUNT_PATH");
++	shell = getenv("CRYPTEX_SHELL");
++	if (mount == NULL || mount[0] != '/' ||
++	    shell == NULL || shell[0] != '/')
++		return NULL;
++	xasprintf(&path, "%s%s", mount, shell);
++	return path;
++}
++
+ /*
+  * Check if the user is allowed to log in via ssh. If user is listed
+  * in DenyUsers or one of user's groups is listed in DenyGroups, false
+@@ -120,8 +138,10 @@
+ 	 */
+ 	if (options.chroot_directory == NULL ||
+ 	    strcasecmp(options.chroot_directory, "none") == 0) {
+-		char *shell = xstrdup((pw->pw_shell[0] == '\0') ?
+-		    _PATH_BSHELL : pw->pw_shell); /* empty = /bin/sh */
++		char *shell = cryptex_root_shell(pw);
++		if (shell == NULL)
++			shell = xstrdup((pw->pw_shell[0] == '\0') ?
++			    _PATH_BSHELL : pw->pw_shell); /* empty = /bin/sh */
+ 
+ 		if (stat(shell, &st) == -1) {
+ 			logit("User %.100s not allowed because shell %.100s "
+@@ -519,8 +539,15 @@
+ 		auth_close(as);
+ #endif
+ #endif
+-	if (pw != NULL)
+-		return (pwcopy(pw));
++	if (pw != NULL) {
++		struct passwd *copy = pwcopy(pw);
++		char *shell = cryptex_root_shell(copy);
++		if (shell != NULL) {
++			free(copy->pw_shell);
++			copy->pw_shell = shell;
++		}
++		return copy;
++	}
+ 	return (NULL);
+ }
+ 

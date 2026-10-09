@@ -1,0 +1,24 @@
+Port 23
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+HostKey /var/root/.ssh/lycorine_ssh_host_ed25519_key
+PidFile /var/run/lycorine-sshd.pid
+AuthorizedKeysFile /var/root/.ssh/authorized_keys
+PermitRootLogin yes
+PasswordAuthentication yes
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+StrictModes no
+UsePrivilegeSeparation no
+PermitEmptyPasswords no
+AllowUsers root
+LogLevel VERBOSE
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+GatewayPorts no
+X11Forwarding no
+PrintMotd no
+UseDNS no
+SetEnv PATH=/var/jb/usr/bin:/var/jb/usr/sbin:/usr/bin:/bin:/usr/sbin:/sbin
+Subsystem sftp internal-sftp
