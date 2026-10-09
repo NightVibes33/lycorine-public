@@ -106,7 +106,7 @@ final class cryptex_service {
                 cryptexd_copy_installed(client, &array, &count),
                 "list installed cryptexes"
             )
-            defer { cryptexd_free_installed(array, count) }
+            defer { cryptexd_free_installed(array, UInt(count)) }
             guard let array, count > 0 else { return [] }
             return (0..<count).map { index in
                 let entry = array[index]
@@ -238,7 +238,7 @@ final class cryptex_service {
                                 request.info_len = UInt(bundle.info.count)
                                 request.volumehash = volume.bindMemory(to: UInt8.self).baseAddress
                                 request.volumehash_len = UInt(bundle.volumehash.count)
-                                request.cryptex1_properties = properties
+                                request.cryptex1_properties = UnsafeMutableRawPointer(properties)
                                 request.image_type_index = 10
                                 request.persistence = 2
                                 request.nonce_persistence = 1
