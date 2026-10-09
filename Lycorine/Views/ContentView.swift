@@ -1,5 +1,6 @@
 import SwiftUI
 import IDevice
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @StateObject private var install = InstallStatusModel()
@@ -11,6 +12,9 @@ struct ContentView: View {
     @AppStorage("shouldUninstall") private var shouldUninstall = false
     
     @State private var isJailbroken = false
+    @State private var showTSSPicker = false
+    @State private var isRequestingTSS = false
+    @State private var tssStatus = "No TSS request performed"
     
     var body: some View {
         NavigationStack {
@@ -46,6 +50,39 @@ struct ContentView: View {
                 }
                 .modifier(SectionPlatter())
                 
+                VStack(alignment: .leading, spacing: 7) {
+                    Text("Cryptex1 TSS authorization").font(.headline)
+                    Text(tssStatus).font(.caption).foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                    #if targetEnvironment(simulator)
+                    Text("Requires a physical iPhone").font(.caption)
+                    #else
+                    Button(isRequestingTSS ? "Requesting Apple TSS..." : "Import research Cryptex and request TSS") {
+                        showTSSPicker = true
+                    }
+                    .disabled(isRequestingTSS)
+                    #endif
+                }
+                .padding(.vertical, 8)
+                .fileImporter(isPresented: $showTSSPicker, allowedContentTypes: [.item]) { result in
+                    switch result {
+                    case .failure(let error):
+                        tssStatus = error.localizedDescription
+                    case .success(let file):
+                        isRequestingTSS = true
+                        tssStatus = "Checking SHA-384, current nonce and Apple authorization..."
+                        Task {
+                            do {
+                                let response = try await LycorineTSS.shared.requestFresh(file)
+                                tssStatus = "Apple returned a ticket (not installed or device-verified). Report: \(response.diagnostics.lastPathComponent)"
+                            } catch {
+                                tssStatus = error.localizedDescription
+                                print("(tss) \(error.localizedDescription)")
+                            }
+                            isRequestingTSS = false
+                        }
+                    }
+                }
                 VStack {
                     #if targetEnvironment(simulator)
                     Label("Jailbreak requires a physical iPhone", systemImage: "iphone.slash")

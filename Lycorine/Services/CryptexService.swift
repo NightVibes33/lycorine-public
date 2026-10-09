@@ -42,7 +42,7 @@ final class cryptex_service {
     static let shared = cryptex_service()
     private init() {}
 
-    private static func check(
+    static func check(
         _ error: UnsafeMutablePointer<IdeviceFfiError>?,
         _ operation: String
     ) throws {
@@ -54,7 +54,7 @@ final class cryptex_service {
 
     // A valid pairing record and an existing RSD/LocalDevVPN tunnel are
     // prerequisites. One cryptexd RPC consumes its connection.
-    private func withCryptexd<T>(_ operation: (OpaquePointer) throws -> T) throws -> T {
+    func withCryptexd<T>(_ operation: (OpaquePointer) throws -> T) throws -> T {
         let pairingPath = HeartbeatManager.pairingFile()
         guard FileManager.default.fileExists(atPath: pairingPath) else {
             throw cryptex_err(msg: "Pairing file missing. Pair through a supported local-device connection first.")
@@ -122,7 +122,8 @@ final class cryptex_service {
     // The original Lycorine bundle is not provided in the public repository.
     static func load_sealed_img() throws -> LycorineSignedCryptex {
         let name = "com.saccharine.lycorine.recovery.cxbd.signed"
-        guard let root = Bundle.main.resourceURL?.appendingPathComponent(name, isDirectory: true),
+        let bundled = Bundle.main.resourceURL?.appendingPathComponent(name, isDirectory: true)
+        guard let root = LycorineTSS.savedBundle() ?? bundled,
               FileManager.default.fileExists(atPath: root.path) else {
             throw cryptex_err(msg: "No Apple-authorized signed Lycorine cryptex is bundled. Public source omits its TSS signing implementation.")
         }
