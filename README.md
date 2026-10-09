@@ -6,9 +6,17 @@
 
 Write-up: https://www.hrtowii.dev/blog/making-a-not-jailbreak-in-3-weeks
 
-## NightVibes33 fork: experimental Cryptex build tooling
+## NightVibes33 fork: experimental Cryptex build tooling and iOS app
 
-This fork adds a **community reconstruction** of the missing Cryptex build orchestration, with dependency diagnostics, conservative payload auditing, integrity checks and offline tests.
+This fork adds a **community reconstruction** of the missing Cryptex build orchestration, with dependency diagnostics, conservative payload auditing, integrity checks and offline tests. It also adds a public-API `cryptexd` service for RSD inventory and installing **pre-authorized** signed cryptexes; the published original service was missing.
+
+### iOS 27 app build
+
+The SwiftUI project is compiled on the `xcode-27` GitHub runner with `CODE_SIGNING_ALLOWED=NO`. A passing workflow proves the UI and FFI code compile and link; it does **not** verify on-device execution or that Apple's TSS will authorize a modified trust cache.
+
+From [Actions → Lycorine iOS app compile](https://github.com/NightVibes33/lycorine-public/actions/workflows/lycorine-ios-compile.yml), open a successful run and retrieve the `Lycorine-unsigned-UI-only` artifact. The resulting IPA is **unsigned** and is intended for app UI/diagnostics testing after separate normal app signing, not as a working jailbreak.
+
+The app's `load_sealed_img()` explicitly fails unless it finds a validly packaged `com.saccharine.lycorine.recovery.cxbd.signed` and matching local SHA-384 assets. The public repository does **not** contain that signed image or the withheld TSS exploit.
 
 See [reconstruction instructions](docs/RECONSTRUCTION.md).
 
