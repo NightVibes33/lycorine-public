@@ -40,6 +40,9 @@ struct SettingsView: View {
     @State private var checkingProtocol = false
     @State private var protocolStatus = "Not tested"
     @State private var recordDetails = ""
+    @State private var isExportingLog = false
+    @State private var logDocument: LycorineLogExport?
+    @State private var exportStatus = ""
     @StateObject private var discovery = RSDDiscovery()
     @AppStorage("lycorine.rsd.host") private var rsdHost = "10.7.0.1"
     @AppStorage("lycorine.rsd.port") private var rsdPort = 49152
@@ -143,9 +146,17 @@ struct SettingsView: View {
                     Text("Files > On My iPhone > Lycorine > Lycorine-Logs > latest.log")
                         .font(.caption)
                         .textSelection(.enabled)
-                    ShareLink(item: LycorineDiagnosticLog.shared.currentFileURL) {
-                        Label("Share Latest Debug Log", systemImage: "square.and.arrow.up")
+                    Button {
+                        do {
+                            logDocument = try LycorineLogExport.snapshot()
+                            isExportingLog = true
+                        } catch {
+                            exportStatus = "Cannot read log: \(error.localizedDescription)"
+                        }
+                    } label: {
+                        Label("Save Debug Log to Files", systemImage: "square.and.arrow.down")
                     }
+                    Text(exportStatus).font(.caption).foregroundStyle(.secondary)
                     Text("Persistent logs start on launch. Five rotated archives are retained. The entire Documents directory is accessible in Files.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -183,6 +194,17 @@ struct SettingsView: View {
         }
         .onAppear { refreshPairing() }
         .onDisappear { discovery.stop() }
+        .fileExporter(isPresented: $isExportingLog,
+                      document: logDocument,
+                      contentType: .plainText,
+                      defaultFilename: "Lycorine-Debug") { result in
+            if case .failure(let error) = result {
+                exportStatus = "Save failed: \(error.localizedDescription)"
+            } else {
+                exportStatus = "Debug log saved in Files"
+            }
+            logDocument = nil
+        }
         .fileImporter(isPresented: $showImporter,
                       allowedContentTypes: [.xmlPropertyList, .propertyList, .mobiledevicepairing]) { result in
             switch result {

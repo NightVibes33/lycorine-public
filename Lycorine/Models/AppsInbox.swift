@@ -78,7 +78,7 @@ private enum AppsInbox {
             try await Task.sleep(for: .milliseconds(400))
         }
         
-        throw NSError(domain: "Lycorine.Apps", code: 1, userInfo: [NSLocalizedDescriptionKey: "roothelper did not respond"])
+        throw NSError(domain: "Lycorine.Apps", code: 1, userInfo: [NSLocalizedDescriptionKey: "Roothelper did not respond before request timeout. The helper may not be installed/running; this is independent of RemotePairing and TSS."])
     }
 }
 

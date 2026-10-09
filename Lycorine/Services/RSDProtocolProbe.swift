@@ -89,6 +89,7 @@ enum LycorineRemotePairingProbe {
         guard sent else {
             return "Stage 2: TCP connected, but RemotePairing hello could not be sent"
         }
+        var readFailure = "unknown"
         func readExactly(_ count: Int) -> [UInt8]? {
             var bytes = [UInt8](repeating: 0, count: count)
             var offset = 0
@@ -97,13 +98,28 @@ enum LycorineRemotePairingProbe {
                     guard let base = raw.baseAddress else { return -1 }
                     return Darwin.recv(fd, base.advanced(by: offset), count - offset, 0)
                 }
-                if n <= 0 { return nil }
+                if n == 0 {
+                    readFailure = "EOF (remote closed after \(offset)/\(count) header bytes)"
+                    return nil
+                }
+                if n < 0 {
+                    let code = errno
+                    if code == EINTR { continue }
+                    if code == ECONNRESET {
+                        readFailure = "ECONNRESET: peer reset the socket (after \(offset)/\(count) bytes)"
+                    } else if code == EAGAIN || code == EWOULDBLOCK || code == ETIMEDOUT {
+                        readFailure = "timeout waiting for data (after \(offset)/\(count) bytes)"
+                    } else {
+                        readFailure = "recv failed, errno=\(code) (after \(offset)/\(count) bytes)"
+                    }
+                    return nil
+                }
                 offset += n
             }
             return bytes
         }
         guard let header = readExactly(magic.count + 2) else {
-            return "Stage 3: TCP connected and hello sent; peer closed, reset or timed out before RemotePairing response. Endpoint/protocol mismatch is possible; pairing keys have not been tested."
+            return "Stage 3: hello sent; \(readFailure). No initial RemotePairing reply, no pairing credentials tested. Check the forwarded service/protocol before replacing the pairing file."
         }
         guard Array(header.prefix(magic.count)) == magic else {
             return "Stage 3: peer replied, but not with RemotePairing frame magic. Wrong protocol/service is likely."
@@ -111,7 +127,7 @@ enum LycorineRemotePairingProbe {
         let responseLength = Int(header[magic.count]) * 256 + Int(header[magic.count + 1])
         guard responseLength > 0 && responseLength <= 16384,
               let payload = readExactly(responseLength) else {
-            return "Stage 3: RemotePairing frame header found, but payload is invalid or timed out."
+            return "Stage 3: RemotePairing frame header received, payload read failed: \(readFailure)."
         }
         guard let root = (try? JSONSerialization.jsonObject(with: Data(payload))) as? [String: Any],
               let envelope = root["message"] as? [String: Any],
