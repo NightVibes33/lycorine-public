@@ -83,9 +83,11 @@ struct SettingsView: View {
                         let host = LycorineRSD.host
                         let port = LycorineRSD.port
                         checkingTCP = true
+                        print("(rsd.tcp) probe started")
                         tcpStatus = "Connecting to \(host):\(port) without pairing..."
                         DispatchQueue.global(qos: .utility).async {
                             let result = LycorineTCPProbe.check(host: host, port: port)
+                            print("(rsd.tcp) \(result)")
                             DispatchQueue.main.async {
                                 tcpStatus = result
                                 checkingTCP = false
@@ -98,9 +100,11 @@ struct SettingsView: View {
                         let host = LycorineRSD.host
                         let port = LycorineRSD.port
                         checkingProtocol = true
+                        print("(rsd.protocol) hello probe started")
                         protocolStatus = "Sending unauthenticated RemotePairing hello to \(host):\(port)..."
                         DispatchQueue.global(qos: .utility).async {
                             let result = LycorineRemotePairingProbe.test(host: host, port: port)
+                            print("(rsd.protocol) \(result)")
                             DispatchQueue.main.async {
                                 protocolStatus = result
                                 checkingProtocol = false
@@ -114,6 +118,7 @@ struct SettingsView: View {
 
                     Button(testing ? "Testing RSD..." : "Test RSD / Cryptexd connection") {
                         testing = true
+                        print("(rsd.cryptexd) inventory probe started")
                         rsdStatus = "Connecting to \(LycorineRSD.host):\(LycorineRSD.port)…"
                         DispatchQueue.global(qos: .userInitiated).async {
                             let result: String
@@ -123,6 +128,7 @@ struct SettingsView: View {
                             } catch {
                                 result = error.localizedDescription
                             }
+                            print("(rsd.cryptexd) \(result)")
                             DispatchQueue.main.async {
                                 rsdStatus = result
                                 testing = false
@@ -132,6 +138,17 @@ struct SettingsView: View {
                     Text(rsdStatus)
                         .font(.caption.monospaced())
                         .textSelection(.enabled)
+                }
+                Section("Diagnostics") {
+                    Text("Files > On My iPhone > Lycorine > Lycorine-Logs > latest.log")
+                        .font(.caption)
+                        .textSelection(.enabled)
+                    ShareLink(item: LycorineDiagnosticLog.shared.currentFileURL) {
+                        Label("Share Latest Debug Log", systemImage: "square.and.arrow.up")
+                    }
+                    Text("Persistent logs start on launch. Five rotated archives are retained. The entire Documents directory is accessible in Files.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
                 Section("Pairing") {
                     Text(pairingStatus).font(.caption)
