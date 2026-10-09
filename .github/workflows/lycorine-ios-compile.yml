@@ -15,7 +15,7 @@ permissions:
 jobs:
   xcode-ios-compile:
     name: Compile iOS app (no TSS / signing)
-    runs-on: macos-15
+    runs-on: xcode-27
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
