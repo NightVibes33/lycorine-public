@@ -234,14 +234,16 @@ personalize() {
   [[ ! -e "$signed" ]] ||
     die "signed output already exists: $signed; clear explicitly before continuing"
   python3 "$HERE/verify_assets.py" "$cxbd" --format research
-  local target_args=()
-  if [[ -n "${LYCORINE_RESEARCH_DEVICE_UDID:-}" ]]; then
-    target_args=(--udid "$LYCORINE_RESEARCH_DEVICE_UDID")
-  fi
   log 'Requesting documented research personalization from Apple TSS'
   log 'Authorization is controlled by Apple. Patched consumer-device bypass is NOT available.'
-  "$TOOL" "${target_args[@]}" personalize --research \
-    --variant=research -o "$dest" "$cxbd"
+  # macOS ships Bash 3.2; under set -u, empty array expansion can abort.
+  if [[ -n "${LYCORINE_RESEARCH_DEVICE_UDID:-}" ]]; then
+    "$TOOL" --udid "$LYCORINE_RESEARCH_DEVICE_UDID" personalize --research \
+      --variant=research -o "$dest" "$cxbd"
+  else
+    "$TOOL" personalize --research \
+      --variant=research -o "$dest" "$cxbd"
+  fi
   [[ -d "$signed" ]] || die "TSS returned without creating $signed"
   python3 "$HERE/verify_assets.py" "$signed" --format research --signed
   log 'Personalization output present. No on-device installation or execution was attempted.'

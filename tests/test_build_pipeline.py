@@ -148,6 +148,13 @@ class BuildPipelineTests(unittest.TestCase):
         self.assertIn('invalid-plist',
             (self.repo/'build/Cryptex/artifacts/payload-preflight.json').read_text())
 
+    def test_personalization_with_explicit_research_device_udid(self):
+        self.assertEqual(self.call('image').returncode, 0)
+        self.env['LYCORINE_RESEARCH_DEVICE_UDID'] = 'TEST-RESEARCH-DEVICE'
+        result = self.call('personalize')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('--udid TEST-RESEARCH-DEVICE personalize', self.log.read_text())
+
     def test_prevent_unproved_personalization(self):
         result = self.call('personalize')
         self.assertNotEqual(result.returncode, 0)
