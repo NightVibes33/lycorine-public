@@ -111,8 +111,8 @@ final class cryptex_service {
             return (0..<count).map { index in
                 let entry = array[index]
                 return LycorineInstalledCryptex(
-                    identifier: entry.identifier.map(String.init(cString:)) ?? "",
-                    version: entry.version.map(String.init(cString:)) ?? ""
+                    identifier: entry.identifier.map { String(cString: $0) } ?? "",
+                    version: entry.version.map { String(cString: $0) } ?? ""
                 )
             }
         }
@@ -229,15 +229,15 @@ final class cryptex_service {
                             try bundle.volumehash.withUnsafeBytes { volume in
                                 var request = CryptexInstallRequestC()
                                 request.image = image.bindMemory(to: UInt8.self).baseAddress
-                                request.image_len = bundle.image.count
+                                request.image_len = UInt(bundle.image.count)
                                 request.trustcache = trustcache.bindMemory(to: UInt8.self).baseAddress
-                                request.trustcache_len = bundle.trustcache.count
+                                request.trustcache_len = UInt(bundle.trustcache.count)
                                 request.im4m = ticket.bindMemory(to: UInt8.self).baseAddress
-                                request.im4m_len = bundle.ticket.count
+                                request.im4m_len = UInt(bundle.ticket.count)
                                 request.info = info.bindMemory(to: UInt8.self).baseAddress
-                                request.info_len = bundle.info.count
+                                request.info_len = UInt(bundle.info.count)
                                 request.volumehash = volume.bindMemory(to: UInt8.self).baseAddress
-                                request.volumehash_len = bundle.volumehash.count
+                                request.volumehash_len = UInt(bundle.volumehash.count)
                                 request.cryptex1_properties = properties
                                 request.image_type_index = 10
                                 request.persistence = 2
