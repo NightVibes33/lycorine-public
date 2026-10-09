@@ -21,7 +21,7 @@ private func lyc_to_xml(_ node: UnsafeMutableRawPointer?,
 @_silgen_name("plist_mem_free")
 private func lyc_mem_free(_ ptr: UnsafeMutableRawPointer?)
 @_silgen_name("plist_free")
-private func lyc_node_free(_ ptr: UnsafeMutableRawPointer?)
+private func lyc_node_free(_ ptr: OpaquePointer?)
 
 final class LycorineTSS {
     static let shared = LycorineTSS()
@@ -91,7 +91,7 @@ final class LycorineTSS {
             try cryptex_service.check(
                 cryptexd_read_personalization_identifiers(client, &object), "read chip instance")
             guard let object else { throw LycorineTSSError.stopped("No AppleImage4 identifiers") }
-            defer { lyc_node_free(object) }
+            defer { lyc_node_free(OpaquePointer(object)) }
             var buffer: UnsafeMutablePointer<CChar>?
             var length: UInt32 = 0
             guard lyc_to_xml(object, &buffer, &length) == 0, let buffer else {
